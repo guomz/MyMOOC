@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guomz.MyMOOC.dao.CourseDao">
+
+	<select id="queryCourseById" parameterType="Long" resultType="Course">
+		select *
+		from course
+		where
+		course_id=#{0}
+	</select>
+	
+	<select id="queryCourseByCondition" parameterType="Course" resultType="Course">
+		select *
+		from course
+		<where>
+			<if test="course.courseName!=null">
+				and course_name like "%"#{course.courseName}"%"
+			</if>
+		</where>
+		order by priority desc
+		limit #{pageIndex},#{pageSize}
+	</select>
+		
+	<select id="queryCourseByUserId" resultType="Course" parameterType="Long">
+		select
+		uc.course_id,
+		c.course_name,
+		c.course_desc,
+		c.priority,
+		c.img_url,
+		c.avatar_url,
+		c.teacher_id
+		from user_course uc
+		left join course c
+		on
+		uc.course_id=c.course_id
+		where
+		uc.user_id=#{0}
+		order by c.priority desc
+	</select>
+	
+	<update id="addPriority" parameterType="Long">
+		update course
+		set priority=priority+1
+		where
+		course_id=#{0}
+	</update>
+	
+	<select id="queryCollectionByUserId" parameterType="Long" resultType="Course">
+		select
+		uc.course_id,
+		c.course_name,
+		c.course_desc,
+		c.priority,
+		c.img_url,
+		c.avatar_url,
+		c.teacher_id
+		from user_collection uc
+		left join course c
+		on
+		uc.course_id=c.course_id
+		where
+		uc.user_id=#{0}
+		order by c.priority desc
+	</select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guomz.MyMOOC.dao.CommentDao">
+
+	<resultMap type="Comment" id="CommentResultMap">
+		<id column="comment_id" property="commentId"/>
+		<result column="comment_content" property="commentContent"/>
+		<result column="comment_date" property="commentDate"/>
+		<result column="course_id" property="courseId"/>
+		<association property="user" column="user_id">
+			<id column="user_id" property="userId"/>
+			<result column="openid" property="openid"/>
+			<result column="nick_name" property="nickName"/>
+			<result column="avatar_url" property="avatarUrl"/>
+		</association>
+	</resultMap>
+	
+	<select id="queryCommentByCondition" parameterType="Comment" resultMap="CommentResultMap">
+		select
+		c.comment_id,
+		c.comment_content,
+		c.comment_date,
+		c.course_id,
+		u.user_id,
+		u.openid,
+		u.nick_name,
+		u.avatar_url
+		from
+		comment c,user_info u
+		<where>
+			c.user_id=u.user_id
+			<if test="user!=null and user.userId!=null">
+				and c.user_id=#{user.userId}
+			</if> 
+			<if test="courseId!=null">
+				and c.course_id=#{courseId}
+			</if>
+		</where>
+		
+	</select>
+	
+	<insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyColumn="comment_id" keyProperty="commentId">
+		insert into comment
+		(comment_content,comment_date,user_id,course_id)
+		values
+		(#{commentContent},#{commentDate},#{user.userId},#{courseId})
+	</insert>
+	
+</mapper>

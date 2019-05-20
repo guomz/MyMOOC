@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guomz.MyMOOC.dao.UserInfoDao">
+
+	<insert id="insertUserInfo" parameterType="UserInfo" useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId">
+		insert into user_info
+		(openid,nick_name,avatar_url)
+		values
+		(#{openid},#{nickName},#{avatarUrl})
+	</insert>
+	
+	<select id="queryUserInfoByOpenId" parameterType="String" resultType="UserInfo">
+		select *
+		from user_info
+		where
+		openid=#{0}
+	</select>
+	
+</mapper>

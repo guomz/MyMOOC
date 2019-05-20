@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guomz.MyMOOC.dao.EventDao">
+
+	<insert id="insertEvent" parameterType="Event">
+		insert into event
+		(user_id,room_id,event_name,event_detail,event_date,group_name)
+		values
+		(#{userId},#{roomId},#{eventName},#{eventDetail},#{eventDate},#{groupName})
+	</insert>
+	
+	<update id="updateEvent" parameterType="Event">
+		update event
+		<set>
+			<if test="eventName!=null">
+				event_name=#{eventName},
+			</if>
+			<if test="eventDetail!=null">
+				event_detail=#{eventDetail},
+			</if>
+			<if test="groupName!=null">
+				group_name=#{groupName}
+			</if>
+		</set>
+		<where>
+			event_id=#{eventId}
+		</where>
+	</update>
+	
+	<delete id="deleteEvent" parameterType="Long">
+		delete from
+		event
+		where
+		event_id=#{0}
+	</delete>
+	
+	<select id="queryEventByConditions" parameterType="Event" resultType="Event">
+		select *
+		from event
+		<where>
+			<if test="userId!=null">
+				and user_id=#{userId}
+			</if>
+			<if test="roomId!=null">
+				and room_id=#{roomId}
+			</if>
+			<if test="eventDate!=null">
+				and event_date=#{eventDate}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

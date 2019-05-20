@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guomz.MyMOOC.dao.CourseHistoryDao">
+
+	<select id="queryHistoryByUserIdAndCourseId" resultType="CourseHistory">
+		select *
+		from user_course
+		where
+		user_id=#{userId}
+		and course_id=#{courseId}
+	</select>
+	
+	<insert id="insertHistory" parameterType="CourseHistory">
+		insert into user_course
+		(user_id,course_id,chapter,current_pos)
+		values
+		(#{userId},#{courseId},#{chapter},#{currentPos})
+	</insert>
+	
+	<update id="updateHistory" parameterType="CourseHistory">
+		update user_course
+		<set>
+			<if test="chapter!=null">
+				chapter=#{chapter},
+			</if>
+			<if test="currentPos!=null">
+				current_pos=#{currentPos}
+			</if>
+		</set>
+		where
+		user_id=#{userId}
+		and course_id=#{courseId}
+	</update>
+	
+</mapper>

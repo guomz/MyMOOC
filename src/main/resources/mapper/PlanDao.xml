@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guomz.MyMOOC.dao.PlanDao">
+
+	<select id="queryPlanByCondition" parameterType="Plan" resultType="Plan">
+		select *
+		from plan
+		<where>
+			<if test="planDate!=null">
+				and plan_date=#{planDate}
+			</if>
+			<if test="userId!=null">
+				and user_id=#{userId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryPlanById" parameterType="Long" resultType="Plan">
+		select *
+		from plan
+		where
+		plan_id=#{0}
+	</select>
+	
+	<insert id="insertPlanList" parameterType="List" useGeneratedKeys="true" keyColumn="plan_id" keyProperty="planId">
+		insert into plan
+		(plan_name,group_name,plan_detail,plan_date,plan_time,user_id)
+		values
+		<foreach collection="list" index="index" item="item" separator=",">
+			(
+				#{item.planName},
+				#{item.groupName},
+				#{item.planDetail},
+				#{item.planDate},
+				#{item.planTime},
+				#{item.userId}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updatePlan" parameterType="Long">
+		update plan
+		<set>
+			<if test="planName!=null">
+				plan_name=#{planName},
+			</if>
+			<if test="groupName!=null">
+				group_name=#{groupName},
+			</if>
+			<if test="planDetail!=null">
+				plan_detail=#{planDetail},
+			</if>
+			<if test="planTime!=null">
+				plan_time=#{planTime}
+			</if>
+		</set>
+		where
+		plan_id=#{planId}
+	</update>
+	
+	<delete id="deletePlan">
+		delete from plan
+		where
+		plan_id=#{0}
+	</delete>
+	
+</mapper>
